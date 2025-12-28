@@ -1,0 +1,29 @@
+.navbar {
+  height: 50px;
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+}
+
+.navContainer {
+  width: 100%;
+  max-width: 1024px;
+  color: black; /* Carlton Resort 'name' color {on top of page} */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+color: #0071c2;
+font-weight: 800;
+font-size: 30px;
+}
+
+.navButton {
+  margin-left: 20px;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #003580;
+}

@@ -1,0 +1,11 @@
+## TODO
+Check weddings page from southern palms resort and intergrate it into my system
+Check ritz carlton suites
+For the 'searchItem' file, you need to add them individually for you to change the values in them like picture, ratings and pricing
+Change price values everywhere to kes
+Add favicon
+When you click on search button, even without doing anything. It directs you to another page. This should not be normal and should prompt out an error or something
+
+## INSTALLED NPM MODULES
+* sudo npm install -g n
+* npm install
