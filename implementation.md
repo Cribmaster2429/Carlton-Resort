@@ -63,9 +63,9 @@ Hotel Detail Page
 - [x] Unified navbar and header styling
 
 ### In Progress
-- [ ] Add Login modal component
-- [ ] Add "Book Now" CTA to navbar
-- [ ] Remove duplicate auth button from header
+- [x] Add Login modal component
+- [x] Add "Book Now" CTA to navbar
+- [x] Remove duplicate auth button from header
 - [ ] Fix broken external image URLs
 
 ### Pending
