@@ -1,12 +1,12 @@
-import { faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faCalendarDays, faPerson, faUmbrellaBeach, faUtensils, faSpa, faCalendarCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./header.css";
 import { DateRange } from 'react-date-range';
 import { useState } from "react";
-import 'react-date-range/dist/styles.css';  //main css file
-import 'react-date-range/dist/theme/default.css'; //theme css file
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import {format} from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Header = ({type}) => {
   const [destination, setDestination] = useState("");
@@ -18,57 +18,71 @@ const Header = ({type}) => {
       key: 'selection'
     }
   ]);
-  const [openOptions, setOpenOptions] = useState(false)
+  const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
     adult: 1,
     children: 0,
     room: 1
-  })
+  });
+  const [searchError, setSearchError] = useState("");
 
   const navigate = useNavigate();
 
   const handleOption = (name, operation) => {
     setOptions(prev=>{return {
-      ...prev, [name]: operation === "i" ? options[name] + 1 : options[name] -1 
+      ...prev, [name]: operation === "i" ? options[name] + 1 : options[name] -1
     }})
   }
 
   const handleSearch = () => {
-    navigate("/hotels", { state: {destination, date, options}})
+    // Validate destination
+    if (!destination.trim()) {
+      setSearchError("Please enter a destination");
+      return;
+    }
+
+    // Validate date range (check if end date is after start date)
+    if (date[0].startDate.getTime() === date[0].endDate.getTime()) {
+      setSearchError("Please select a check-out date");
+      return;
+    }
+
+    // Clear any previous error and navigate
+    setSearchError("");
+    navigate("/hotels", { state: {destination, date, options}});
   }
 
   return (
     <div className="header">
       <div className={type === "list" ? "headerContainer listMode" : "headerContainer"}>
 
-        <div className="headerList">
-          <div className="headerListItem active">
+        <nav className="headerNav">
+          <Link to="/hotels" className="headerNavItem active">
             <FontAwesomeIcon icon={faBed} />
-            <span>Stays</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faPlane} />
-            <span>Flights</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faCar} />
-            <span>Car Rentals</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faBed} />
-            <span>Attractions</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faTaxi} />
-            <span>Airport Taxis</span>
-          </div>
-        </div>
+            <span>Accommodations</span>
+          </Link>
+          <a href="/#dining" className="headerNavItem">
+            <FontAwesomeIcon icon={faUtensils} />
+            <span>Dining</span>
+          </a>
+          <a href="/#experiences" className="headerNavItem">
+            <FontAwesomeIcon icon={faUmbrellaBeach} />
+            <span>Experiences</span>
+          </a>
+          <a href="/#spa" className="headerNavItem">
+            <FontAwesomeIcon icon={faSpa} />
+            <span>Spa & Wellness</span>
+          </a>
+          <a href="/#events" className="headerNavItem">
+            <FontAwesomeIcon icon={faCalendarCheck} />
+            <span>Events</span>
+          </a>
+        </nav>
 
         { type !== "list" &&
           <>
           <h1 className="headerTitle">Luxury at its finest - Pamper yourself with the royal treatment</h1>
           <p className="headerDesc">Soak up the Hawaiian culture... It's all here waiting for you!!</p>
-          <button className="headerBtn">Sign In / Register</button>
 
         <div className="headerSearch">
           <div className="headerSearchItem">
@@ -123,7 +137,9 @@ const Header = ({type}) => {
           <div className="headerSearchItem">
           <button className="headerBtn" onClick={handleSearch}>Search</button>
           </div>
-        </div></>}
+        </div>
+        {searchError && <div className="searchError">{searchError}</div>}
+        </>}
       </div>
     </div>
   )

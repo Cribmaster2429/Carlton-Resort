@@ -9,10 +9,21 @@ import SearchItem from "../../components/searchItem/SearchItem";
 
 const List = () => {
   const location = useLocation();
-  const [destination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+
+  // Default values when navigating directly (without search state)
+  const defaultDate = [
+    {
+      startDate: new Date(),
+      endDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Tomorrow
+      key: 'selection'
+    }
+  ];
+  const defaultOptions = { adult: 1, children: 0, room: 1 };
+
+  const [destination, setDestination] = useState(location.state?.destination || "");
+  const [date, setDate] = useState(location.state?.date || defaultDate);
   const [openDate, setOpenDate] = useState(false);
-  const [options] = useState(location.state.options);
+  const [options, setOptions] = useState(location.state?.options || defaultOptions);
   return(
     <div>
       <Navbar/>

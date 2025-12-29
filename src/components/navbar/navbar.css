@@ -1,6 +1,6 @@
 .navbar {
-  height: 50px;
-  background-color: lightblue;
+  height: 60px;
+  background: #0077b6;
   display: flex;
   justify-content: center;
 }
@@ -8,22 +8,61 @@
 .navContainer {
   width: 100%;
   max-width: 1024px;
-  color: black; /* Carlton Resort 'name' color {on top of page} */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 20px;
 }
 
 .logo {
-color: #0071c2;
-font-weight: 800;
-font-size: 30px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  transition: opacity 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.9;
+}
+
+.navItems {
+  display: flex;
+  gap: 12px;
 }
 
 .navButton {
-  margin-left: 20px;
-  border: none;
-  padding: 5px 10px;
+  padding: 10px 20px;
   cursor: pointer;
-  color: #003580;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.navButtonOutline {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: white;
+}
+
+.navButtonOutline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+.navButtonBook {
+  background: linear-gradient(135deg, #ef476f 0%, #d62246 100%);
+  border: none;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.navButtonBook:hover {
+  background: linear-gradient(135deg, #d62246 0%, #c41e3a 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 71, 111, 0.4);
 }

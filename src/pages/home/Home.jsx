@@ -4,6 +4,10 @@ import Header from "../../components/header/Header";
 import Featured from "../../components/featured/Featured";
 import PropertyList from "../../components/propertyList/PropertyList";
 import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties";
+import Dining from "../../components/dining/Dining";
+import Experiences from "../../components/experiences/Experiences";
+import Spa from "../../components/spa/Spa";
+import Events from "../../components/events/Events";
 import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
 
@@ -18,6 +22,10 @@ const Home = () => {
         <PropertyList />
         <h1 className="homeTitle">Suites guests enjoy staying at</h1>
         <FeaturedProperties/>
+        <Dining/>
+        <Experiences/>
+        <Spa/>
+        <Events/>
         <MailList/>
         <Footer/>
       </div>
