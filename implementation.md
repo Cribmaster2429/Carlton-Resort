@@ -1,34 +1,39 @@
 # Carlton Resort - Implementation Plan
-
 This document outlines the current state of the codebase and the roadmap for completing the application.
 
----
-
 ## Current State Assessment
-
 ### What Works (UI Only)
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Home page layout | Working | Displays all sections |
-| Navigation | Working | Links to sections via anchor tags |
-| Search bar | Partial | Navigates to `/hotels` but doesn't filter results |
-| Date picker | Working | UI functional, selects date range |
-| Guest counter | Working | UI functional, increments/decrements |
-| List page | Partial | Displays hardcoded results, no actual filtering |
-| Hotel detail page | Partial | Shows hotel info, image slider works |
-| Responsive design | Not implemented | Desktop only |
+```text
++----------------------+-----------------+-----------------------------------------------------+
+| Feature              | Status          | Notes                                               |
++----------------------+-----------------+-----------------------------------------------------+
+| Home page layout     | Working         | Displays all sections                               |
+| Navigation           | Working         | Links to sections via anchor tags                   |
+| Search bar           | Partial         | Navigates to /hotels but doesn't filter results     |
+| Date picker          | Working         | UI functional, selects date range                   |
+| Guest counter        | Working         | UI functional, increments/decrements                |
+| List page            | Partial         | Displays hardcoded results, no actual filtering     |
+| Hotel detail page    | Partial         | Shows hotel info, image slider works                |
+| Responsive design    | Not implemented | Desktop only                                        |
++----------------------+-----------------+-----------------------------------------------------+
+```
 
 ### What's Non-Functional
 
-| Feature | Current State | What's Needed |
-|---------|---------------|---------------|
-| Search filtering | Button navigates but doesn't filter | Implement actual search logic |
-| "See availability" buttons | No onClick handler | Connect to hotel detail or booking |
-| "Reserve or book now" buttons | No onClick handler | Build booking/checkout flow |
-| Login/Register buttons | No onClick handler | Build auth modal + backend |
-| PayPal integration | SDK installed, unconfigured | Implement createOrder, onApprove handlers |
-| Backend API | Referenced but doesn't exist | Build Node.js/Express API or use mock data |
+```text
++-------------------------------+----------------------------------+-----------------------------------------------+
+| Feature                       | Current State                    | What's Needed                                 |
++-------------------------------+----------------------------------+-----------------------------------------------+
+| Search filtering              | Button navigates but doesn't     | Implement actual search logic                 |
+|                               | filter                           |                                               |
+| "See availability" buttons    | No onClick handler               | Connect to hotel detail or booking            |
+| "Reserve or book now" buttons | No onClick handler               | Build booking/checkout flow                   |
+| Login/Register buttons        | No onClick handler               | Build auth modal + backend                    |
+| PayPal integration            | SDK installed, unconfigured      | Implement createOrder, onApprove handlers     |
+| Backend API                   | Referenced but doesn't exist     | Build Node.js/Express API or use mock data    |
++-------------------------------+----------------------------------+-----------------------------------------------+
+```
 
 ### Current User Flow
 
@@ -53,7 +58,6 @@ Hotel Detail Page
 ---
 
 ## Phase 1: UI/UX Improvements (Current)
-
 ### Completed
 - [x] Migrated from Create React App to Vite
 - [x] Updated React to v19
@@ -76,7 +80,6 @@ Hotel Detail Page
 ---
 
 ## Phase 2: Core Functionality
-
 ### Authentication System
 - [ ] Create AuthModal component (Login/Register tabs)
 - [ ] Implement form validation
@@ -98,7 +101,6 @@ Hotel Detail Page
 ---
 
 ## Phase 3: Payment Integration
-
 ### PayPal Setup
 - [ ] Configure PayPal SDK with sandbox credentials
 - [ ] Implement createOrder handler
@@ -109,7 +111,6 @@ Hotel Detail Page
 ---
 
 ## Phase 4: Backend (Optional for Frontend Demo)
-
 ### If Building Full-Stack
 - [ ] Set up Node.js/Express server
 - [ ] Create MongoDB/PostgreSQL database
@@ -167,7 +168,6 @@ Carlton-Resort/
 ---
 
 ## Commands Reference
-
 ```bash
 # Development
 npm run dev
@@ -182,7 +182,6 @@ npm run preview
 ---
 
 ## Priority Order for Capstone
-
 1. **High Priority** - Makes it look professional
    - Login modal (shows modern UI patterns)
    - Working search filter (core functionality)
