@@ -37,8 +37,8 @@ const Footer = () => (
       <div className="footerCol">
         <h4>Contact</h4>
         <span><FontAwesomeIcon icon={faLocationDot} /> North Shore, Solmera Cay</span>
-        <a href="tel:+18085550100"><FontAwesomeIcon icon={faPhone} /> +1 (808) 555 0100</a>
-        <a href="mailto:reservations@carltonresort.com"><FontAwesomeIcon icon={faEnvelope} /> reservations@carltonresort.com</a>
+        <a href="tel:+15550100100"><FontAwesomeIcon icon={faPhone} /> +1 (555) 010 0100</a>
+        <a href="mailto:reservations@solmeracay.com"><FontAwesomeIcon icon={faEnvelope} /> reservations@solmeracay.com</a>
       </div>
     </div>
 
