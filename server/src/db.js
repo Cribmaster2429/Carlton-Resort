@@ -3,11 +3,11 @@ import { mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-// One SQLite file under server/data/ (gitignored). Created on first run.
+// One SQLite file under server/data/ (gitignored), created on first run. DB_PATH overrides it, useful for tests.
 const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "data");
 mkdirSync(dir, { recursive: true });
 
-export const db = new DatabaseSync(path.join(dir, "carlton.db"));
+export const db = new DatabaseSync(process.env.DB_PATH || path.join(dir, "carlton.db"));
 
 db.exec(`
   PRAGMA journal_mode = WAL;

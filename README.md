@@ -44,6 +44,13 @@ The database is created on first run at `server/data/carlton.db` and is not comm
 
 Errors come back as `{ "error": "message" }` with a 4xx status.
 
+## Email
+
+New subscribers get a welcome email and reservation requests get a confirmation with their
+reference number. Mail goes out through any SMTP account: copy `server/.env.example` to
+`server/.env` and fill it in (a Gmail App Password works, no paid service needed). Without it the
+API still stores everything and logs each email it would have sent.
+
 ## Status
 
 Done: home page, stay list and stay pages, newsletter and reservation requests stored in SQLite,

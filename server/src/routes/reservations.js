@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db } from "../db.js";
 import { findStay } from "../stays.js";
 import { isEmail, normalizeEmail, parseIsoDate, todayIso } from "../validate.js";
+import { sendMail, reservationMail } from "../mail.js";
 
 const router = Router();
 const insert = db.prepare(
@@ -24,8 +25,9 @@ router.post("/", (req, res) => {
   if (checkOut <= checkIn) return res.status(400).json({ error: "Check out must be after check in" });
   if (!Number.isInteger(guests) || guests < 1 || guests > 10) return res.status(400).json({ error: "Guests must be between 1 and 10" });
 
-  const { lastInsertRowid } = insert.run(stay.slug, name, email, checkIn, checkOut, guests);
-  res.status(201).json({ ok: true, id: Number(lastInsertRowid) });
+  const id = Number(insert.run(stay.slug, name, email, checkIn, checkOut, guests).lastInsertRowid);
+  sendMail(reservationMail({ to: email, name, stay: stay.title, checkIn, checkOut, guests, id }));
+  res.status(201).json({ ok: true, id });
 });
 
 export default router;
