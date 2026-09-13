@@ -5,6 +5,9 @@ node_modules
 build
 dist
 
+# SQLite database
+server/data/
+
 # Environment variables
 .env
 .env.local
