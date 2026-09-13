@@ -1,0 +1,16 @@
+{
+  "name": "carlton-resort-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "node --watch --no-warnings=ExperimentalWarning src/index.js",
+    "start": "node --no-warnings=ExperimentalWarning src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
