@@ -1,36 +1,33 @@
 import "./hotel.css";
 import Navbar from "../../components/navbar/Navbar";
-import Header from "../../components/header/Header";
 import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
+import ReserveModal from "../../components/reserveModal/ReserveModal";
+import { findStay } from "../../components/stay/Stay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
+
+// Gallery shown for every stay until each has its own set. Thumbnails are the 480px copies in images/thumbs.
+const photos = [
+  "/images/property/rooms.jpg",
+  "/images/suites/ocean-breeze-suite.jpg",
+  "/images/suites/marina-suite.jpg",
+  "/images/suites/coral-garden-villa.jpg",
+  "/images/suites/sunrise-beach-suite.jpg",
+  "/images/property/villas.jpg",
+];
+const thumb = (src) => `/images/thumbs/${src.split("/").pop()}`;
 
 const Hotel = () => {
+  const { id } = useParams();
+  const stay = findStay(id);
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [reserveOpen, setReserveOpen] = useState(false);
 
-  const photos = [
-    {
-      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/26/b8/41/da/southern-palms-beach.jpg?w=1200&h=-1&s=1",
-    },
-    {
-      src: "https://s7d2.scene7.com/is/image/ritzcarlton/RCDORAD_00109_conversion?$XlargeViewport100pct$",
-    },
-    {
-      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/6f/9e/60/southern-palms-beach.jpg?w=1200&h=-1&s=1",
-    },
-    {
-      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/6f/9d/d3/southern-palms-beach.jpg?w=1200&h=-1&s=1",
-    },
-    {
-      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/6f/9d/80/southern-palms-beach.jpg?w=1200&h=-1&s=1",
-    },
-    {
-      src: "https://s7d2.scene7.com/is/image/ritzcarlton/RCDORAD_00222_conversion?$XlargeViewport100pct$"
-    },
-  ];
+  if (!stay) return <Navigate to="/hotels" replace />;
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -38,78 +35,65 @@ const Hotel = () => {
   };
 
   const handleMove = (direction) => {
-    let newSlideNumber;
-
-    if(direction==="l"){
-      newSlideNumber = slideNumber === 0 ? 5 : slideNumber-1;
-    } else {
-      newSlideNumber = slideNumber === 5 ? 0 : slideNumber+1;
-
-    }
-
-    setSlideNumber(newSlideNumber);
-
-  }
+    setSlideNumber((slideNumber + (direction === "l" ? -1 : 1) + photos.length) % photos.length);
+  };
 
   return (
     <div>
-      <Navbar/>
-      <Header type="list"/>
+      <Navbar />
       <div className="hotelContainer">
-        {open && <div className="slider">
-          <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={()=>setOpen(false)}/>
-          <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={()=>handleMove("l")}/>
-          <div className="sliderWrapper">
-            <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+        {open && (
+          <div className="slider">
+            <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
+            <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
+            <div className="sliderWrapper">
+              <img src={photos[slideNumber]} alt="" className="sliderImg" />
+            </div>
+            <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")} />
           </div>
-          <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={()=>handleMove("r")}/>
-        </div>}
+        )}
 
         <div className="hotelWrapper">
-          <button className="bookNow">Reserve or book now</button>
-          <h1 className="hotelTitle">Grand Beach Hotel</h1>
-          <div className="hotelAdress">
-            <FontAwesomeIcon icon={faLocationDot}/>
-            <span>Kilifi Mindiani</span>
+          <button className="bookNow" onClick={() => setReserveOpen(true)}>Reserve or book now</button>
+          <h1 className="hotelTitle">{stay.title}</h1>
+          <div className="hotelAddress">
+            <FontAwesomeIcon icon={faLocationDot} />
+            <span>North Shore, Solmera Cay</span>
           </div>
-          <span className="hotelDistance">Excellent Location - 500m from center</span>
-          <span className="hotelPriceHighlight">
-            Book a stay over $114 at this property and get a free airport taxi
-          </span>
+          <span className="hotelDistance">{stay.blurb}</span>
+          <span className="hotelPriceHighlight">Stays of three nights or more include the airport transfer</span>
           <div className="hotelImages">
-            {photos.map((photo,i)=>(
-              <div className="hotelImgWrapper">
-                <img onClick={()=>handleOpen(i)} src={photo.src} alt="" className="hotelImg" />
+            {photos.map((src, i) => (
+              <div className="hotelImgWrapper" key={src}>
+                <img onClick={() => handleOpen(i)} src={thumb(src)} alt="" className="hotelImg" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
 
           <div className="hotelDetails">
             <div className="hotelDetailsTexts">
-              <h1 className="hotelTitle">Breath taking beach retreats</h1>
+              <h1 className="hotelTitle">{stay.features}</h1>
               <p className="hotelDesc">
-                Discover the perfect beachfront escape at The Ritz-Carlton, where distinctive
-                resort experiences reflect the world’s most desirable destinations. From secluded 
-                honeymoon retreats to family-friendly destinations, there are endless ways to find your place in the sun.
+                Every room faces the water. The only decision is how much of it you want to yourself.
+                {" "}{stay.blurb}. Breakfast until whenever you wake up, and the beach is at the door.
               </p>
             </div>
             <div className="hotelDetailsPrice">
-              <h1>Perfect for a fortnight stay!!</h1>
-              <span>
-                Located across the shores of the Indian Ocean, this property has an excellent location score of 9.8
-              </span>
+              <h1>From ${stay.price} a night</h1>
+              <span>Guests rate this stay {stay.rating}, {stay.label.toLowerCase()}.</span>
               <h2>
-                <b>$945</b> (Fortnight)
+                <b>${stay.price * 3}</b> for three nights
               </h2>
-              <button>Reserve or book now</button>
+              <button onClick={() => setReserveOpen(true)}>Reserve or book now</button>
             </div>
           </div>
         </div>
-        <MailList/>
-        <Footer/>
+        <ReserveModal isOpen={reserveOpen} onClose={() => setReserveOpen(false)} stay={stay} />
+        <MailList />
+        <Footer />
       </div>
     </div>
-  )
+  );
 };
 
 export default Hotel;

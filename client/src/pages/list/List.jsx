@@ -1,94 +1,95 @@
 import "./list.css";
-import Navbar from '../../components/navbar/Navbar';
-import Header from '../../components/header/Header';
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
-import { format } from "date-fns";
-import { DateRange } from "react-date-range";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/footer/Footer";
 import SearchItem from "../../components/searchItem/SearchItem";
+import { stays } from "../../components/stay/Stay";
+import { counters, defaultOptions, defaultDates, formatStayDate, clampOption } from "../../lib/search";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { DateRange } from "react-date-range";
 
 const List = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Default values when navigating directly (without search state)
-  const defaultDate = [
-    {
-      startDate: new Date(),
-      endDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Tomorrow
-      key: 'selection'
-    }
-  ];
-  const defaultOptions = { adult: 1, children: 0, room: 1 };
-
-  const [destination, setDestination] = useState(location.state?.destination || "");
-  const [date, setDate] = useState(location.state?.date || defaultDate);
-  const [openDate, setOpenDate] = useState(false);
+  const [type, setType] = useState(location.state?.type || "");
+  const [date, setDate] = useState(() => location.state?.date || defaultDates());
   const [options, setOptions] = useState(location.state?.options || defaultOptions);
-  return(
+  const [openDate, setOpenDate] = useState(false);
+  const [today] = useState(() => new Date());
+
+  // Footer and navbar links land on this route while it is already mounted, so resync from route state.
+  useEffect(() => {
+    setType(location.state?.type || "");
+    if (location.state?.date) setDate(location.state.date);
+    if (location.state?.options) setOptions(location.state.options);
+  }, [location.state]);
+
+  const appliedType = location.state?.type || "";
+  const results = stays.filter((stay) => !appliedType || stay.title === appliedType);
+
+  const handleSearch = () => {
+    setOpenDate(false);
+    navigate("/hotels", { state: { type, date, options }, replace: true });
+  };
+
+  return (
     <div>
-      <Navbar/>
-      <Header type="list"/>
+      <Navbar />
       <div className="listContainer">
         <div className="listWrapper">
           <div className="listSearch">
             <h1 className="lsTitle">Search</h1>
 
             <div className="lsItem">
-              <label>Destination</label>
-              <input placeholder={destination} type="text" />
+              <label>Stay</label>
+              <select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="">Any</option>
+                {stays.map((stay) => (
+                  <option key={stay.slug}>{stay.title}</option>
+                ))}
+              </select>
             </div>
 
             <div className="lsItem">
-              <label>Check-in Date</label>
-              <span onClick={()=>setOpenDate(!openDate)}>{`${format(date[0].startDate, "dd-MM-yyyy")} to ${format(date[0].endDate,
-                 "dd-MM-yyyy")}`}</span>
-              {(openDate && <DateRange onChange={item=>setDate([item.selection])}
-               minDate={new Date()} ranges={date}></DateRange>)}
+              <label>Dates</label>
+              <span onClick={() => setOpenDate(!openDate)}>
+                {`${formatStayDate(date[0].startDate)} to ${formatStayDate(date[0].endDate)}`}
+              </span>
+              {openDate && <DateRange onChange={(item) => setDate([item.selection])} minDate={today} ranges={date} />}
             </div>
 
             <div className="lsItem">
-              <label>Options</label>
+              <label>Guests</label>
               <div className="lsOptions">
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Min price <small>per night</small></span>
-                  <input type="number" className="lsOptionInput" />
-                </div>
-
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Max price <small>per night</small></span>
-                  <input type="number" className="lsOptionInput" />
-                </div>
-
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Adult</span>
-                  <input type="number" min={1} className="lsOptionInput" placeholder={options.adult}/>
-                </div>
-
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Children</span>
-                  <input type="number" min={0} className="lsOptionInput" placeholder={options.children}/>
-                </div>
-
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Room</span>
-                  <input type="number" min={1} className="lsOptionInput" placeholder={options.room}/>
-                </div>
-
+                {counters.map((c) => (
+                  <div className="lsOptionItem" key={c.name}>
+                    <span className="lsOptionText">{c.label}</span>
+                    <input
+                      type="number"
+                      min={c.min}
+                      className="lsOptionInput"
+                      value={options[c.name]}
+                      onChange={(e) => setOptions({ ...options, [c.name]: clampOption(c.name, e.target.value) })}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
-            <button>Search</button>
-
+            <button onClick={handleSearch}>Search</button>
           </div>
+
           <div className="listResult">
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
+            <h2 className="listResultTitle">{appliedType || "All stays"}</h2>
+            {results.map((stay) => (
+              <SearchItem key={stay.slug} stay={stay} />
+            ))}
           </div>
         </div>
       </div>
+      <Footer />
     </div>
-  )
+  );
 };
 
 export default List;
-

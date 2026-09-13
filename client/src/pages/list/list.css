@@ -1,84 +1,108 @@
 .listContainer {
   display: flex;
   justify-content: center;
-  margin-top: 20px;  
+  padding: 40px 24px 100px;
 }
 
 .listWrapper {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1120px;
   display: flex;
-  gap: 20px;
+  gap: 24px;
 }
 
-.listSearch { 
-  flex:1;
-  background-color: orange;
-  padding: 10px;
-  border-radius: 10px;
+.listSearch {
+  flex: 1;
+  background: var(--sand);
+  padding: 20px;
+  border-radius: 4px;
   position: sticky;
-  top: 10px;
+  top: 90px;
   height: max-content;
 }
 
 .lsTitle {
-  font-size: 20px;
-  color: #555;  /* gray */
-  margin-bottom: 10px;
+  font-size: 28px;
+  margin-bottom: 14px;
 }
 
 .lsItem {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 
-.lsItem>label {
-  font-size: 16px;
+.lsItem > label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-.lsItem>input {
-  height: 30px;
-  border: none;
-  padding: 5px;
+.lsItem > input,
+.lsItem > select {
+  height: 40px;
+  border: 1px solid #e3ded6;
+  background: #fff;
+  padding: 0 10px;
+  font-family: var(--sans);
+  font-size: 14px;
 }
 
-.lsItem>span {
-  height: 30px;
-  padding: 5px;
-  background-color: white;
+.lsItem > span {
+  height: 40px;
+  padding: 0 10px;
+  background: #fff;
+  border: 1px solid #e3ded6;
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .lsOptions {
-  padding: 10px;
+  padding: 6px 0;
 }
 
 .lsOptionItem {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
-  color: #555;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .lsOptionInput {
-  width: 50px;
+  width: 64px;
+  height: 32px;
+  border: 1px solid #e3ded6;
+  padding: 0 8px;
 }
 
-.listSearch>button {
-  padding: 10px;
-  background-color: #0071c2;
-  color: white;
-  border: none;
+.listSearch > button {
   width: 100%;
-  font-weight: 500;
+  padding: 14px;
+  border: 0;
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
+.listSearch > button:hover {
+  background: var(--ocean);
+}
+
 .listResult {
-  flex:3;
+  flex: 3;
+}
+
+.listResultTitle {
+  font-size: 36px;
+  margin-bottom: 20px;
 }

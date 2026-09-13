@@ -110,7 +110,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         {/* ====== HEADER SECTION ====== */}
         <div className="modalHeader">
           <h2>Welcome to Carlton Resort</h2>
-          <p>Your Hawaiian paradise awaits</p>
+          <p>Sign in to manage your stay</p>
         </div>
 
 

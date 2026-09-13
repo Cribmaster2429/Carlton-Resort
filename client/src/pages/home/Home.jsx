@@ -1,9 +1,7 @@
-import "./home.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
-import Featured from "../../components/featured/Featured";
-import PropertyList from "../../components/propertyList/PropertyList";
-import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties";
+import Stay from "../../components/stay/Stay";
+import Statement from "../../components/statement/Statement";
 import Dining from "../../components/dining/Dining";
 import Experiences from "../../components/experiences/Experiences";
 import Spa from "../../components/spa/Spa";
@@ -11,26 +9,19 @@ import Events from "../../components/events/Events";
 import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
 
-const Home = () => {
-  return(
-    <div>
-      <Navbar/>
-      <Header/>
-      <div className="homeContainer">
-        <Featured/>
-        <h1 className="homeTitle">Browse based on how you wish to enjoy your stay</h1>
-        <PropertyList />
-        <h1 className="homeTitle">Suites guests enjoy staying at</h1>
-        <FeaturedProperties/>
-        <Dining/>
-        <Experiences/>
-        <Spa/>
-        <Events/>
-        <MailList/>
-        <Footer/>
-      </div>
-    </div>
-  )
-}
+const Home = () => (
+  <>
+    <Navbar overlay />
+    <Header />
+    <Stay />
+    <Statement />
+    <Dining />
+    <Experiences />
+    <Spa />
+    <Events />
+    <MailList />
+    <Footer />
+  </>
+);
 
 export default Home;

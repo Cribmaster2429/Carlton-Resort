@@ -1,46 +1,24 @@
-import "./events.css";
+import Card from "../card/Card";
 
-const Events = () => {
-  const eventTypes = [
-    {
-      id: 1,
-      name: "Weddings",
-      description: "Beachfront ceremonies and elegant receptions",
-      image: "/images/events/wedding.jpg"
-    },
-    {
-      id: 2,
-      name: "Meetings & Conferences",
-      description: "Modern facilities with inspiring ocean views",
-      image: "/images/events/conference.jpg"
-    },
-    {
-      id: 3,
-      name: "Private Events",
-      description: "Birthdays, anniversaries, and special occasions",
-      image: "/images/events/celebration.jpg"
-    }
-  ];
+const events = [
+  { name: "Weddings", description: "Up to 120 guests on the sand", image: "/images/events/wedding.jpg" },
+  { name: "Meetings", description: "Three rooms, all facing the water", image: "/images/events/conference.jpg" },
+  { name: "Celebrations", description: "Private dinners and long nights", image: "/images/events/celebration.jpg" },
+];
 
-  return (
-    <section id="events" className="eventsSection">
-      <h1 className="eventsTitle">Events & Celebrations</h1>
-      <p className="eventsDesc">
-        From dream weddings to corporate retreats, we create extraordinary moments.
-      </p>
-      <div className="eventsGrid">
-        {eventTypes.map((event) => (
-          <div key={event.id} className="eventsCard">
-            <img src={event.image} alt={event.name} className="eventsCardImg" />
-            <div className="eventsCardContent">
-              <h3>{event.name}</h3>
-              <p>{event.description}</p>
-            </div>
-          </div>
+const Events = () => (
+  <section id="events" className="section">
+    <div className="wrap">
+      <p className="eyebrow">Events</p>
+      <h2 className="sectionTitle">Say it by the sea.</h2>
+      <p className="lede spaced">Weddings on the beach, boardrooms with a view, and birthdays that run late.</p>
+      <div className="grid grid3">
+        {events.map((e) => (
+          <Card key={e.name} img={e.image} title={e.name} subtitle={e.description} wide />
         ))}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default Events;

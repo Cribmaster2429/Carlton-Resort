@@ -1,46 +1,24 @@
-import "./experiences.css";
+import Card from "../card/Card";
 
-const Experiences = () => {
-  const activities = [
-    {
-      id: 1,
-      name: "Ocean Adventures",
-      description: "Snorkeling, diving, and sunset cruises",
-      image: "/images/experiences/ocean-adventures.jpg"
-    },
-    {
-      id: 2,
-      name: "Island Tours",
-      description: "Guided hikes and cultural excursions",
-      image: "/images/experiences/island-tours.jpg"
-    },
-    {
-      id: 3,
-      name: "Water Sports",
-      description: "Surfing, paddleboarding, and kayaking",
-      image: "/images/experiences/water-sports.jpg"
-    }
-  ];
+const activities = [
+  { name: "Ocean Adventures", description: "Snorkelling, diving and sunset cruises", image: "/images/experiences/ocean-adventures.jpg" },
+  { name: "Island Tours", description: "Guided hikes and the villages inland", image: "/images/experiences/island-tours.jpg" },
+  { name: "Water Sports", description: "Surf, paddleboard, kayak", image: "/images/experiences/water-sports.jpg" },
+];
 
-  return (
-    <section id="experiences" className="experiencesSection">
-      <h1 className="experiencesTitle">Unforgettable Experiences</h1>
-      <p className="experiencesDesc">
-        Create lasting memories with our curated activities and island adventures.
-      </p>
-      <div className="experiencesGrid">
-        {activities.map((activity) => (
-          <div key={activity.id} className="experiencesCard">
-            <img src={activity.image} alt={activity.name} className="experiencesCardImg" />
-            <div className="experiencesCardContent">
-              <h3>{activity.name}</h3>
-              <p>{activity.description}</p>
-            </div>
-          </div>
+const Experiences = () => (
+  <section id="experiences" className="section">
+    <div className="wrap">
+      <p className="eyebrow">Experiences</p>
+      <h2 className="sectionTitle">Days that fill themselves.</h2>
+      <p className="lede spaced">A reef dive before breakfast, a boat out to the sandbar, or nothing at all. All three are on the menu.</p>
+      <div className="grid grid3">
+        {activities.map((a) => (
+          <Card key={a.name} img={a.image} title={a.name} subtitle={a.description} wide />
         ))}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default Experiences;

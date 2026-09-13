@@ -1,148 +1,103 @@
-import { faBed, faCalendarDays, faPerson, faUmbrellaBeach, faUtensils, faSpa, faCalendarCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./header.css";
-import { DateRange } from 'react-date-range';
 import { useState } from "react";
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
-import {format} from "date-fns";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { DateRange } from "react-date-range";
+import { differenceInCalendarDays } from "date-fns";
+import { counters, defaultOptions, defaultDates, formatStayDate } from "../../lib/search";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import "./header.css";
 
-const Header = ({type}) => {
-  const [destination, setDestination] = useState("");
-  const [openDate, setOpenDate] = useState(false);
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
-  const [openOptions, setOpenOptions] = useState(false);
-  const [options, setOptions] = useState({
-    adult: 1,
-    children: 0,
-    room: 1
-  });
-  const [searchError, setSearchError] = useState("");
-
+// Home page hero plus the availability bar under it. Search carries dates and guests to /hotels.
+const Header = () => {
   const navigate = useNavigate();
+  const [openDate, setOpenDate] = useState(false);
+  const [openGuests, setOpenGuests] = useState(false);
+  const [date, setDate] = useState(defaultDates);
+  const [options, setOptions] = useState(defaultOptions);
+  const [error, setError] = useState("");
+  const [today] = useState(() => new Date());
 
-  const handleOption = (name, operation) => {
-    setOptions(prev=>{return {
-      ...prev, [name]: operation === "i" ? options[name] + 1 : options[name] -1
-    }})
-  }
+  const toggle = (which) => {
+    setOpenDate(which === "date" ? !openDate : false);
+    setOpenGuests(which === "guests" ? !openGuests : false);
+  };
+
+  const handleOption = (name, delta) => setOptions((prev) => ({ ...prev, [name]: prev[name] + delta }));
 
   const handleSearch = () => {
-    // Validate destination
-    if (!destination.trim()) {
-      setSearchError("Please enter a destination");
+    if (differenceInCalendarDays(date[0].endDate, date[0].startDate) < 1) {
+      setError("Please choose a check out date after check in");
       return;
     }
+    setError("");
+    navigate("/hotels", { state: { date, options } });
+  };
 
-    // Validate date range (check if end date is after start date)
-    if (date[0].startDate.getTime() === date[0].endDate.getTime()) {
-      setSearchError("Please select a check-out date");
-      return;
-    }
-
-    // Clear any previous error and navigate
-    setSearchError("");
-    navigate("/hotels", { state: {destination, date, options}});
-  }
+  const guests = `${options.adult} adult${options.adult === 1 ? "" : "s"}${options.children ? `, ${options.children} child${options.children === 1 ? "" : "ren"}` : ""}`;
 
   return (
-    <div className="header">
-      <div className={type === "list" ? "headerContainer listMode" : "headerContainer"}>
-
-        <nav className="headerNav">
-          <Link to="/hotels" className="headerNavItem active">
-            <FontAwesomeIcon icon={faBed} />
-            <span>Accommodations</span>
-          </Link>
-          <a href="/#dining" className="headerNavItem">
-            <FontAwesomeIcon icon={faUtensils} />
-            <span>Dining</span>
-          </a>
-          <a href="/#experiences" className="headerNavItem">
-            <FontAwesomeIcon icon={faUmbrellaBeach} />
-            <span>Experiences</span>
-          </a>
-          <a href="/#spa" className="headerNavItem">
-            <FontAwesomeIcon icon={faSpa} />
-            <span>Spa & Wellness</span>
-          </a>
-          <a href="/#events" className="headerNavItem">
-            <FontAwesomeIcon icon={faCalendarCheck} />
-            <span>Events</span>
-          </a>
-        </nav>
-
-        { type !== "list" &&
-          <>
-          <h1 className="headerTitle">Luxury at its finest - Pamper yourself with the royal treatment</h1>
-          <p className="headerDesc">Soak up the Hawaiian culture... It's all here waiting for you!!</p>
-
-        <div className="headerSearch">
-          <div className="headerSearchItem">
-            <FontAwesomeIcon icon={faBed} className="headerIcon" />
-            <input type="text" placeholder="What is your destination?"
-            onChange={e=>setDestination(e.target.value)} className="headerSearchInput" />
-          </div>
-
-          <div className="headerSearchItem">
-            <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
-            <span onClick={()=>setOpenDate(!openDate)} className="headerSearchText">{`${format(date[0].startDate, "dd-MM-yyyy")}
-             to ${format(date[0].endDate, "dd-MM-yyyy")}`}</span>
-            {openDate && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])}
-            moveRangeOnFirstSelection={false} ranges={date} className="date" minDate={new Date()}/>}
-          </div>
-
-          <div className="headerSearchItem">
-            <FontAwesomeIcon icon={faPerson} className="headerIcon" />
-            <span onClick={()=>setOpenOptions(!openOptions)} className="headerSearchText">{`${options.adult} adult . ${options.children} children . 
-            ${options.room} room`}</span>
-            { openOptions && <div className="options">
-              <div className="optionItem">
-                <span className="optionText">Adult</span>
-                <div className="optionCounter">
-                  <button disabled={options.adult <= 1} className="optionCounterButton" onClick={()=>handleOption("adult", "d")}>-</button>
-                  <span className="optionCounterNumber">{options.adult}</span>
-                  <button className="optionCounterButton" onClick={()=>handleOption("adult", "i")}>+</button>
-                </div>
-              </div>
-
-              <div className="optionItem">
-                <span className="optionText">Children</span>
-                <div className="optionCounter">
-                  <button disabled={options.children <= 0} className="optionCounterButton" onClick={()=>handleOption("children", "d")}>-</button>
-                  <span className="optionCounterNumber">{options.children}</span>
-                  <button className="optionCounterButton" onClick={()=>handleOption("children", "i")}>+</button>
-                </div>
-              </div>
-
-              <div className="optionItem">
-                <span className="optionText">Room</span>
-                <div className="optionCounter">
-                  <button disabled={options.room <= 1} className="optionCounterButton" onClick={()=>handleOption("room", "d")}>-</button>
-                  <span className="optionCounterNumber">{options.room}</span>
-                  <button className="optionCounterButton" onClick={()=>handleOption("room", "i")}>+</button>
-                </div>
-              </div>
-
-            </div>}
-          </div>
-
-          <div className="headerSearchItem">
-          <button className="headerBtn" onClick={handleSearch}>Search</button>
+    <>
+      <section className="hero">
+        <video className="heroVideo" autoPlay muted loop playsInline poster="/video/hero-poster.jpg">
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="wrap heroContent">
+          <p className="eyebrow gold">Solmera Cay</p>
+          <h1 className="heroTitle">The ocean sets the pace.</h1>
+          <p className="heroDesc">A private stretch of white sand, forty suites and villas, and nothing you have to do.</p>
+          <div className="heroActions">
+            <a className="btn btnGold" href="#availability">Check availability</a>
+            <a className="btn btnGhost" href="#stay">Explore the resort</a>
           </div>
         </div>
-        {searchError && <div className="searchError">{searchError}</div>}
-        </>}
+      </section>
+
+      <div className="avail" id="availability">
+        <div className="availBar">
+          <button type="button" className="availItem" onClick={() => toggle("date")}>
+            <small>Check in</small>
+            <span>{formatStayDate(date[0].startDate)}</span>
+          </button>
+          <button type="button" className="availItem" onClick={() => toggle("date")}>
+            <small>Check out</small>
+            <span>{formatStayDate(date[0].endDate)}</span>
+          </button>
+          <button type="button" className="availItem" onClick={() => toggle("guests")}>
+            <small>Guests</small>
+            <span>{guests}</span>
+          </button>
+          <button type="button" className="availSearch" onClick={handleSearch}>Search</button>
+
+          {openDate && (
+            <DateRange
+              editableDateInputs
+              onChange={(item) => setDate([item.selection])}
+              moveRangeOnFirstSelection={false}
+              ranges={date}
+              minDate={today}
+              className="availDates"
+            />
+          )}
+
+          {openGuests && (
+            <div className="availGuests">
+              {counters.map((c) => (
+                <div className="availCounter" key={c.name}>
+                  <span>{c.label}</span>
+                  <div>
+                    <button type="button" disabled={options[c.name] <= c.min} onClick={() => handleOption(c.name, -1)}>−</button>
+                    <b>{options[c.name]}</b>
+                    <button type="button" onClick={() => handleOption(c.name, 1)}>+</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {error && <div className="availError">{error}</div>}
       </div>
-    </div>
-  )
-}
+    </>
+  );
+};
 
 export default Header;
