@@ -5,7 +5,7 @@ import "./mailList.css";
 
 const MailList = () => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState(""); // "", sending, done
+  const [status, setStatus] = useState(""); // "", sending, done, already
   const [error, setError] = useState("");
 
   const handleSubscribe = async (e) => {
@@ -13,8 +13,8 @@ const MailList = () => {
     if (!isEmail(email)) return setError("Please enter a valid email address");
     setStatus("sending");
     try {
-      await postJson("/api/subscribe", { email });
-      setStatus("done");
+      const { already } = await postJson("/api/subscribe", { email });
+      setStatus(already ? "already" : "done");
     } catch (err) {
       setStatus("");
       setError(err.message);
@@ -27,7 +27,9 @@ const MailList = () => {
         <h2 className="sectionTitle">A few emails a year.</h2>
         <p className="mailDesc">Offers first, then the occasional note about what is new. Nothing weekly, nothing shouting.</p>
         {status === "done" ? (
-          <p className="mailSuccess">You are on the list. We will be in touch, occasionally.</p>
+          <p className="mailSuccess">You are on the list. A welcome note is on its way to {email}.</p>
+        ) : status === "already" ? (
+          <p className="mailSuccess">{email} is already on the list. Nothing more to do.</p>
         ) : (
           <form className="mailForm" onSubmit={handleSubscribe} noValidate>
             <input
