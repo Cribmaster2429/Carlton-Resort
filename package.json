@@ -8,6 +8,6 @@
     "dev:web": "node client/node_modules/vite/bin/vite.js --config client/vite.config.js",
     "dev:api": "node --watch --no-warnings=ExperimentalWarning --env-file-if-exists=server/.env server/src/index.js",
     "build": "node client/node_modules/vite/bin/vite.js build --config client/vite.config.js",
-    "start": "node --no-warnings=ExperimentalWarning --env-file-if-exists=server/.env server/src/index.js"
+    "start": "node --no-warnings=ExperimentalWarning --env-file-if-exists=server/.env server/src/index.js --serve-client"
   }
 }

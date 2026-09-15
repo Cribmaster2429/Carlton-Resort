@@ -15,14 +15,22 @@ app.use("/api/subscribe", subscribe);
 app.use("/api/reservations", reservations);
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found" }));
 
-// Production: the Vite build plus an SPA fallback for page navigations. Asset misses stay 404.
-app.use(express.static(clientDist));
-app.get(/.*/, (req, res, next) => {
-  if (path.extname(req.path) || !req.accepts("html")) return next();
-  res.sendFile(path.join(clientDist, "index.html"), (err) => {
-    if (err) res.status(503).type("text/plain").send("Client build not found. Run npm run build first.");
+// npm start passes --serve-client: the Vite build plus an SPA fallback for page navigations. Asset misses stay 404.
+// In dev the site lives on Vite (port 3000), so this process answers API calls only.
+if (process.argv.includes("--serve-client")) {
+  app.use(express.static(clientDist));
+  app.get(/.*/, (req, res, next) => {
+    if (path.extname(req.path) || !req.accepts("html")) return next();
+    res.sendFile(path.join(clientDist, "index.html"), (err) => {
+      if (err) res.status(503).type("text/plain").send("Client build not found. Run npm run build first.");
+    });
   });
-});
+} else {
+  app.get(/.*/, (req, res, next) => {
+    if (!req.accepts("html")) return next();
+    res.status(404).type("text/plain").send("Carlton Resort API. In development the site is served by Vite on http://localhost:3000/");
+  });
+}
 
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 

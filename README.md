@@ -25,7 +25,7 @@ Vite proxies `/api` to the API in development, so the front end only ever uses r
 
 ```bash
 npm run build    # builds client/dist
-npm start        # one Express process on port 4000 serving the build and the API
+npm start        # one Express process on port 4000 serving the build and the API (the only time 4000 serves pages)
 ```
 
 The database is created on first run at `server/data/carlton.db` and is not committed.
