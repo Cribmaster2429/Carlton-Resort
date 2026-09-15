@@ -1,14 +1,18 @@
 import nodemailer from "nodemailer";
 
-// Outbound mail through any SMTP account (a Gmail App Password works). See .env.example.
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_FROM } = process.env;
-const configured = Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
+// Outbound mail through any SMTP account. Defaults suit a Gmail App Password, so SMTP_USER and SMTP_PASS are enough. See .env.example.
+const SMTP_HOST = process.env.SMTP_HOST?.trim() || "smtp.gmail.com";
+const SMTP_PORT = Number(process.env.SMTP_PORT) || 587;
+const SMTP_USER = process.env.SMTP_USER?.trim();
+const SMTP_PASS = process.env.SMTP_PASS?.replace(/\s+/g, "");
+const MAIL_FROM = process.env.MAIL_FROM?.trim();
+const configured = Boolean(SMTP_USER && SMTP_PASS);
 
 const transport = configured
   ? nodemailer.createTransport({
       host: SMTP_HOST,
-      port: Number(SMTP_PORT) || 587,
-      secure: Number(SMTP_PORT) === 465,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
   : null;
