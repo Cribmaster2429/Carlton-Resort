@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "postinstall": "npm install --prefix client && npm install --prefix server",
-    "dev": "concurrently -k -n web,api -c cyan,yellow \"npm --prefix client run dev\" \"npm --prefix server run dev\"",
-    "dev:web": "npm --prefix client run dev",
-    "dev:api": "npm --prefix server run dev",
-    "build": "npm --prefix client run build",
-    "start": "npm --prefix server start"
+    "dev": "concurrently -k -n web,api -c cyan,yellow \"npm:dev:web\" \"npm:dev:api\"",
+    "dev:web": "node client/node_modules/vite/bin/vite.js --config client/vite.config.js",
+    "dev:api": "node --watch --no-warnings=ExperimentalWarning --env-file-if-exists=server/.env server/src/index.js",
+    "build": "node client/node_modules/vite/bin/vite.js build --config client/vite.config.js",
+    "start": "node --no-warnings=ExperimentalWarning --env-file-if-exists=server/.env server/src/index.js"
   },
   "devDependencies": {
     "concurrently": "^10.0.5"
